@@ -20,8 +20,9 @@ typedef struct stu
     //struct stu *next;
 //}stu1_t;
 
-stu_t stu[50];
+//stu_t stu[50];
 //stu1_t stu1[50];
+stu_t stu;
 
 void menu_display(void)
 {
@@ -59,15 +60,15 @@ int cre_stu_info()
     printf("Please input students' information:\n");
     for(i = 0;i < n;i++)
     {
-        scanf("%d%s%f%f%f",&stu[i].id,stu[i].name,&stu[i].chi,
-                            &stu[i].math,&stu[i].average);
-        fprintf(fp,"%d %s %.1f %.1f %.1f\n",stu[i].id,stu[i].name
-                        ,stu[i].chi,stu[i].math,stu[i].average);
+        scanf("%d%s%f%f%f",&stu.id,stu.name,&stu.chi,
+                            &stu.math,&stu.average);
+        fprintf(fp,"%d %s %.1f %.1f %.1f\n",stu.id,stu.name
+                        ,stu.chi,stu.math,stu.average);
     }
-    for(i = 0;i < n;i++)
-    {
-        printf("%d %s %f %f %f\n",stu[i].id,stu[i].name,stu[i].chi,stu[i].math,stu[i].average);
-    }
+    //for(i = 0;i < n;i++)
+    //{
+        //printf("%d %s %f %f %f\n",stu[i].id,stu[i].name,stu[i].chi,stu[i].math,stu[i].average);
+    //}
     fclose(fp);
 }
 
@@ -75,7 +76,7 @@ stu_t * creat_l_list()
 {
     FILE *fp;
     stu_t *head = NULL,*p1,*p2;
-    p1 = stu;
+    p1 = &stu;
     int i = 0;
     fp = fopen("stu_info.txt","r");
     while(1) 
@@ -115,12 +116,27 @@ void travel(stu_t *head)
     }
 }
 
+void dis_stu(void)
+{
+    FILE *fp;
+    stu_t stu1;
+    fp = fopen("stu_info.txt","r");
+    while(!feof(fp))
+    {
+        fscanf(fp,"%d%s%f%f%f",&stu1.id,stu1.name,&stu1.chi,
+                            &stu1.math,&stu1.average);
+        printf("%d %s %.1f %.1f %.1f\n",stu1.id,stu1.name
+                        ,stu1.chi,stu1.math,stu1.average);
+    }
+}
+
 int main(int argc, const char *argv[])
 {
     stu_t *head;
     //menu_display();
-    cre_stu_info();
+    //cre_stu_info();
     //head = creat_l_list();
     //travel(head);
+    dis_stu();
     return 0;
 }
