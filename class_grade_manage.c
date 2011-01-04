@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <stdlib.h>
 typedef struct stu
 {
     unsigned id;
@@ -22,7 +22,6 @@ typedef struct stu
 
 //stu_t stu[50];
 //stu1_t stu1[50];
-stu_t stu;
 
 void menu_display(void)
 {
@@ -47,6 +46,7 @@ void menu_display(void)
 /*create a file with student's infomation*/
 int cre_stu_info()
 {
+    stu_t stu;
     FILE *fp;
     int i,n = 0;
     printf("Please input the amount of students: ");
@@ -75,34 +75,33 @@ int cre_stu_info()
 stu_t * creat_l_list()
 {
     FILE *fp;
-    stu_t *head = NULL,*p1,*p2;
-    p1 = &stu;
+    stu_t *head = NULL,p1,*p2;
     int i = 0;
     fp = fopen("stu_info.txt","r");
     while(1) 
     {
+        if(feof(fp))
+            return head;
         fscanf(fp,"%d %s %f %f %f",
-            &(p1->id),p1->name,&(p1->chi),
-            &(p1->math),&(p1->average));
+            &p1.id,p1.name,&p1.chi,
+            &p1.math,&p1.average);
         i++;
         if(i == 1)
         {
-            head = p1;    
-            p2 = p1;
-            head->next = NULL;
+            head = &p1;    
+            p2 = &p1;
+            p2->next = NULL;
         }
         else
         {
-            p2->next = p1;
-            p2 = p1;
-            p1->next = NULL;
+            p2->next = &p1;
+            p2->next = NULL;
         }
-        if(feof(fp))
-            return head;
-        else
-            p1++;
+        //if(feof(fp))
+            //return head;
     }
 }
+
 
 void travel(stu_t *head)
 {
@@ -110,24 +109,27 @@ void travel(stu_t *head)
     p = head;
     while(p != NULL)
     {
-        printf("%d %s %f %f %f\n",p->id,p->name,
+        printf("%d %s %.1f %.1f %.1f\n",p->id,p->name,
             p->chi,p->math,p->average);
         p = p->next;
     }
 }
 
-void dis_stu(void)
+int dis_stu(void)
 {
     FILE *fp;
     stu_t stu1;
     fp = fopen("stu_info.txt","r");
-    while(!feof(fp))
+    while(1)
     {
         fscanf(fp,"%d%s%f%f%f",&stu1.id,stu1.name,&stu1.chi,
                             &stu1.math,&stu1.average);
+        if(feof(fp))
+            return 0;
         printf("%d %s %.1f %.1f %.1f\n",stu1.id,stu1.name
                         ,stu1.chi,stu1.math,stu1.average);
     }
+    fclose(fp);
 }
 
 int main(int argc, const char *argv[])
@@ -135,8 +137,8 @@ int main(int argc, const char *argv[])
     stu_t *head;
     //menu_display();
     //cre_stu_info();
-    //head = creat_l_list();
-    //travel(head);
-    dis_stu();
+    head = creat_l_list();
+    travel(head);
+    //dis_stu();
     return 0;
 }
